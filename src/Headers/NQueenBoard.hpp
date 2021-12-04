@@ -19,58 +19,117 @@ public:
         : cGenotype({}),
           cFenotype({})
     {
+        const auto offset = getRandNumber();
         for (int val = 0; val < N; val++)
         {
-            cGenotype[val] = val;
+            cGenotype[(val + offset) % N] = val;
         }
+        calculateFenotype();
     }
 
     NQueenBoard(const std::array<int, N> &genotype)
         : cGenotype(genotype),
           cFenotype({})
     {
+        calculateFenotype();
     }
 
     ~NQueenBoard() {}
 
-    NQueenBoard pmxWith(const NQueenBoard &mate) const
+    // NQueenBoard pmxWith(const NQueenBoard &mate) const
+    // {
+    //     throw Exception("Algoritmo não implementado corretamente.");
+    //     const auto randomNumber1 = getRandNumber();
+    //     const auto randomNumber2 = getRandNumber(N - randomNumber1) + randomNumber1 + 1;
+
+    //     std::array<int, N> newGenotype = {-1};
+
+    //     // copy random piece of genotype from first parent
+    //     for (auto i = randomNumber1; i != randomNumber2; i++)
+    //         newGenotype[i] = cGenotype[i];
+
+    //     for (auto i = randomNumber1; i != N; i++)
+    //     {
+    //         const auto genotype = mate.cGenotype[i];
+
+    //         const auto indexGenotype = getIndexByGenotypeValue(genotype);
+
+    //         if (indexGenotype == -1)
+    //         {
+    //             const auto indexGenotypeMate =  mate.getIndexByGenotypeValue(cGenotype[i]);
+    //             if(newGenotype[indexGenotypeMate] == -1)
+    //                 newGenotype[indexGenotypeMate] = mate.cGenotype[indexGenotypeMate];
+    //         }
+    //     }
+
+    //     for (auto i = 0; i != randomNumber1; i++)
+    //     {
+    //     }
+
+    //     mate.drawNQueenBoard();
+
+    //     return NQueenBoard<N>(newGenotype);
+    // }
+
+    NQueenBoard oxWith(const NQueenBoard &mate) const
     {
         const auto randomNumber1 = getRandNumber();
         const auto randomNumber2 = getRandNumber(N - randomNumber1) + randomNumber1 + 1;
 
-        std::array<int, N> newGenotype = {-1};
+        auto newGenotype = std::array<int, N>();
+
+        std::fill(newGenotype.begin(), newGenotype.end(), -1);
+
+        auto positionSonF = randomNumber2;
 
         // copy random piece of genotype from first parent
         for (auto i = randomNumber1; i != randomNumber2; i++)
             newGenotype[i] = cGenotype[i];
 
-        for (auto i = randomNumber1; i != N; i++)
+        const auto getIndexOfValue = [](const auto value, const auto &array, const auto arrayLength) -> int
         {
-            const auto genotype = mate.cGenotype[i];
-
-            const auto indexGenotype = getIndexByGenotypeValue(genotype);
-
-            if (indexGenotype == -1)
+            for (auto i = 0; i < arrayLength; i++)
             {
-                const auto indexGenotypeMate =  mate.getIndexByGenotypeValue(cGenotype[i]);
-                if(newGenotype[indexGenotypeMate] == -1)
-                    newGenotype[indexGenotypeMate] = mate.cGenotype[indexGenotypeMate];
+                if (array[i] == value)
+                    return i;
             }
-        }
 
-        for (auto i = 0; i != randomNumber1; i++)
+            return -1;
+        };
+
+        const auto verifyAndCopy = [&mate, &newGenotype, &positionSonF, &getIndexOfValue, this](const auto positionMate) -> void
         {
+            const auto genotype = mate.cGenotype[positionMate];
+
+            const auto indexGenotype = getIndexOfValue(genotype, newGenotype, N);
+            const auto alreadyCopied = indexGenotype != -1;
+
+            if (alreadyCopied)
+            {
+                return;
+            }
+
+            newGenotype[positionSonF] = genotype;
+            positionSonF = (positionSonF +1) % N;
+        };
+        positionSonF %= N;
+        for (auto positionMate = randomNumber2; positionMate != N; positionMate++)
+        {
+            verifyAndCopy(positionMate);
         }
 
-        mate.drawNQueenBoard();
+        for (auto positionMate = 0; positionMate != randomNumber2; positionMate++)
+        {
+            verifyAndCopy(positionMate);
+        }
+
+        // mate.drawNQueenBoard();
 
         return NQueenBoard<N>(newGenotype);
     }
 
-    void drawNQueenBoard()
+    void drawNQueenBoard() const
     {
-        calculateFenotype();
-
         for (auto i = 0u; i < N; i++)
         {
             for (auto j = 0u; j < N; j++)
@@ -81,27 +140,55 @@ public:
         }
     }
 
+    void writeGenotype() const
+    {
+        for(const auto genotype : cGenotype)
+            std::cout << '|' << genotype << '|';  
+
+        std::cout << '\n';
+    }
+
     auto getGenotype() const
     {
         return cGenotype;
     }
 
-    auto getFitting()
+    auto getFitting() const
     {
-        calculateFenotype();
-
         const auto getNumberOfCaptures = [this](const auto row, const auto col)
         {
             auto result = 0u;
 
-            for (auto ij = std::max(row, col); ij != N; ij++)
+            for (auto i = row; i != N && col - (i - row) >= 0; i++)
+            {                
+                const auto j = col - (i - row);
+                if(i == row || j == col)
+                    continue;
+                result += cFenotype[(j) + (i)*N] ? 1 : 0;
+            }   
+
+            for (auto i = row; i >= 0 && col - (i - row) < N; i--)
             {
-                result += cFenotype[(ij) + (ij)*N] ? 1 : 0;
+                const auto j = col - (i - row);
+                if(i == row || j == col)
+                    continue;
+                result += cFenotype[(j) + (i)*N] ? 1 : 0;
             }
 
-            for (auto ij = std::min(row, col); ij != 0; ij--)
+            for (auto j = col; j != N && row - (j - col) >= 0; j++)
             {
-                result += cFenotype[(ij) + (ij)*N] ? 1 : 0;
+                const auto i = row - (j - col);
+                if(i == row || j == col)
+                    continue;
+                result += cFenotype[(j) + (i)*N] ? 1 : 0;
+            }
+
+            for (auto j = col; j >= 0 && row - (j - col) < N; j--)
+            {
+                const auto i = row - (j - col);
+                if(i == row || j == col)
+                    continue;
+                result += cFenotype[(j) + (i)*N] ? 1 : 0;
             }
 
             return result;
@@ -114,7 +201,7 @@ public:
             total += getNumberOfCaptures(cGenotype[ii], ii);
         }
 
-        return 1 / total;
+        return 1 / (total + 1);
     }
 
     constexpr uint32_t getBoardSize() const
@@ -141,7 +228,7 @@ private:
         return rand() % maxValue;
     };
 
-    auto getIndexByGenotypeValue(const int value)
+    auto getIndexByGenotypeValue(const int value) const
     {
         for (auto i = 0; i < N; i++)
         {
