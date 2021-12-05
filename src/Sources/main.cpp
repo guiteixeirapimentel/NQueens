@@ -76,6 +76,10 @@ void simulateGenerations()
         if (minFitting == 0)
             break;
     }
+
+    if (!showOutputPerGeneration)
+    {
+        const auto minFitting = population.front().getFitting();
         std::cout << "---------------------------------------\n";
         std::cout << "Current gen: " << currentGeneration << std::endl;
         std::cout << "Min fitting: " << minFitting << std::endl;
