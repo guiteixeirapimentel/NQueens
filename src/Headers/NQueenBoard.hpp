@@ -47,7 +47,6 @@ public:
 
         auto positionSonF = randomNumber2;
 
-        // copy random piece of genotype from first parent
         for (auto i = randomNumber1; i != randomNumber2; i++)
             newGenotype[i] = cGenotype[i];
 
@@ -87,8 +86,6 @@ public:
         {
             verifyAndCopy(positionMate);
         }
-
-        // mate.drawNQueenBoard();
 
         return NQueenBoard<N>(newGenotype);
     }
