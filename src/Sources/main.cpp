@@ -33,13 +33,13 @@ void simulateGenerations()
 
     auto nextPopulation = population;
 
-    const auto sortDecByFitting = [](auto &iterable)
+    const auto sortAscByFitting = [](auto &iterable) -> void
     {
         std::sort(iterable.begin(), iterable.end(), [](const auto &p1, const auto &p2) -> bool
-                  { return p1.getFitting() > p2.getFitting(); });
+                  { return p1.getFitting() < p2.getFitting(); });
     };
 
-    sortDecByFitting(nextPopulation);
+    sortAscByFitting(nextPopulation);
 
     for (auto currentGeneration = 0; currentGeneration != totalOfGenerations; currentGeneration++)
     {
@@ -55,8 +55,7 @@ void simulateGenerations()
             std::cout << "fit: " << pop.getFitting() << std::endl;
         }
         population = nextPopulation;
-        sortDecByFitting(population);
-        for (const auto pop : population)
+        sortAscByFitting(population);
         {
             std::cout << "fit: " << pop.getFitting() << std::endl;
         }
