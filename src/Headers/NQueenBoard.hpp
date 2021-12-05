@@ -122,37 +122,49 @@ public:
     {
         const auto getNumberOfCaptures = [this](const auto row, const auto col)
         {
-            auto result = 0u;
+            auto result = 0;
 
-            for (auto i = row; i != N && col - (i - row) >= 0; i++)
-            {                
-                const auto j = col - (i - row);
-                if(i == row || j == col)
-                    continue;
-                result += cFenotype[(j) + (i)*N] ? 1 : 0;
-            }   
-
-            for (auto i = row; i >= 0 && col - (i - row) < N; i--)
+            for(auto offset = 1; offset < N; offset++)
             {
-                const auto j = col - (i - row);
-                if(i == row || j == col)
-                    continue;
+                const auto i = row + offset;
+                const auto j = col + offset;
+
+                if(i >= N || j >= N)
+                    break;
+                
                 result += cFenotype[(j) + (i)*N] ? 1 : 0;
             }
 
-            for (auto j = col; j != N && row - (j - col) >= 0; j++)
+            for(auto offset = 1; offset < N; offset++)
             {
-                const auto i = row - (j - col);
-                if(i == row || j == col)
-                    continue;
+                const auto i = row - offset;
+                const auto j = col - offset;
+
+                if(i < 0 || j < 0)
+                    break;
+                
                 result += cFenotype[(j) + (i)*N] ? 1 : 0;
             }
 
-            for (auto j = col; j >= 0 && row - (j - col) < N; j--)
+            for(auto offset = 1; offset < N; offset++)
             {
-                const auto i = row - (j - col);
-                if(i == row || j == col)
-                    continue;
+                const auto i = row + offset;
+                const auto j = col - offset;
+
+                if(i >= N || j < 0)
+                    break;
+                
+                result += cFenotype[(j) + (i)*N] ? 1 : 0;
+            }
+
+            for(auto offset = 1; offset < N; offset++)
+            {
+                const auto i = row - offset;
+                const auto j = col + offset;
+
+                if(i < 0 || j >= N)
+                    break;
+                
                 result += cFenotype[(j) + (i)*N] ? 1 : 0;
             }
 
