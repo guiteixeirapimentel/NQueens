@@ -3,10 +3,11 @@
 #include <vector>
 #include <algorithm>
 
-constexpr auto populationSize = 6;
-constexpr auto boardSize = 5;
+constexpr auto populationSize = 20;
+constexpr auto boardSize = 8;
+constexpr auto totalOfGenerations = 500;
 
-constexpr auto totalOfGenerations = 100;
+constexpr auto showOutputPerGeneration = true;
 
 void simulateGenerations();
 
