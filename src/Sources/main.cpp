@@ -59,9 +59,23 @@ void simulateGenerations()
         }
         population = nextPopulation;
         sortAscByFitting(population);
+
+        const auto minFitting = population.front().getFitting();
+
+        if (showOutputPerGeneration)
         {
-            std::cout << "fit: " << pop.getFitting() << std::endl;
+            std::cout << "---------------------------------------\n";
+            std::cout << "Current gen: " << currentGeneration << std::endl;
+            std::cout << "Max fitting: " << minFitting << std::endl;
+            population.front().writeGenotype();
+
+            population.front().drawNQueenBoard();
+            std::cout << "---------------------------------------\n";
         }
+
+        if (minFitting == 0)
+            break;
+    }
         std::cout << "---------------------------------------\n";
         std::cout << "Current gen: " << currentGeneration << std::endl;
         std::cout << "Max fitting: " << population.front().getFitting() << std::endl;
