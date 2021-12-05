@@ -14,8 +14,6 @@ int main()
 {
     try
     {
-        const auto a = NQueenBoard<5>({0,3,1,2,4});
-        a.getFitting();
         simulateGenerations();
     }
     catch (const Exception &e)
