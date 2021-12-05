@@ -66,7 +66,7 @@ void simulateGenerations()
         {
             std::cout << "---------------------------------------\n";
             std::cout << "Current gen: " << currentGeneration << std::endl;
-            std::cout << "Max fitting: " << minFitting << std::endl;
+            std::cout << "Min fitting: " << minFitting << std::endl;
             population.front().writeGenotype();
 
             population.front().drawNQueenBoard();
@@ -78,7 +78,7 @@ void simulateGenerations()
     }
         std::cout << "---------------------------------------\n";
         std::cout << "Current gen: " << currentGeneration << std::endl;
-        std::cout << "Max fitting: " << population.front().getFitting() << std::endl;
+        std::cout << "Min fitting: " << minFitting << std::endl;
         population.front().writeGenotype();
 
         population.front().drawNQueenBoard();
