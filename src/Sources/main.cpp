@@ -43,16 +43,19 @@ void simulateGenerations()
 
     for (auto currentGeneration = 0; currentGeneration != totalOfGenerations; currentGeneration++)
     {
-        for (auto pair = 0; pair < populationSize; pair += 2)
+        nextPopulation[0] = population[0];
+        nextPopulation[0 + 1] = population[0 + 1];
+
+        for (auto pair = 2; pair < populationSize / 2; pair += 2)
         {
             nextPopulation[pair] = population[pair].oxWith(population[pair + 1]);
-
             nextPopulation[pair + 1] = population[pair + 1].oxWith(population[pair]);
         }
 
-        for (const auto pop : population)
+        for (auto index = (populationSize / 2) - 1; index < populationSize; index++)
         {
-            std::cout << "fit: " << pop.getFitting() << std::endl;
+            const auto mateIndex = rand() % populationSize;
+            nextPopulation[index] = population[index].oxWith(population[mateIndex]);
         }
         population = nextPopulation;
         sortAscByFitting(population);
