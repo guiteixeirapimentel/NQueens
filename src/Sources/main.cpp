@@ -9,10 +9,13 @@ constexpr auto totalOfGenerations = 500;
 
 constexpr auto showOutputPerGeneration = true;
 
+constexpr auto randomNumberSeed = 1050;
+
 void simulateGenerations();
 
 int main()
 {
+    srand(randomNumberSeed);
     try
     {
         simulateGenerations();
