@@ -40,8 +40,9 @@ void simulateGenerations()
     };
 
     sortAscByFitting(nextPopulation);
+    auto currentGeneration = 0;
 
-    for (auto currentGeneration = 0; currentGeneration != totalOfGenerations; currentGeneration++)
+    for (; currentGeneration != totalOfGenerations; currentGeneration++)
     {
         nextPopulation[0] = population[0];
         nextPopulation[0 + 1] = population[0 + 1];
