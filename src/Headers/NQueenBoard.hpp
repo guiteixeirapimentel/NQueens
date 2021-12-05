@@ -36,41 +36,6 @@ public:
 
     ~NQueenBoard() {}
 
-    // NQueenBoard pmxWith(const NQueenBoard &mate) const
-    // {
-    //     throw Exception("Algoritmo não implementado corretamente.");
-    //     const auto randomNumber1 = getRandNumber();
-    //     const auto randomNumber2 = getRandNumber(N - randomNumber1) + randomNumber1 + 1;
-
-    //     std::array<int, N> newGenotype = {-1};
-
-    //     // copy random piece of genotype from first parent
-    //     for (auto i = randomNumber1; i != randomNumber2; i++)
-    //         newGenotype[i] = cGenotype[i];
-
-    //     for (auto i = randomNumber1; i != N; i++)
-    //     {
-    //         const auto genotype = mate.cGenotype[i];
-
-    //         const auto indexGenotype = getIndexByGenotypeValue(genotype);
-
-    //         if (indexGenotype == -1)
-    //         {
-    //             const auto indexGenotypeMate =  mate.getIndexByGenotypeValue(cGenotype[i]);
-    //             if(newGenotype[indexGenotypeMate] == -1)
-    //                 newGenotype[indexGenotypeMate] = mate.cGenotype[indexGenotypeMate];
-    //         }
-    //     }
-
-    //     for (auto i = 0; i != randomNumber1; i++)
-    //     {
-    //     }
-
-    //     mate.drawNQueenBoard();
-
-    //     return NQueenBoard<N>(newGenotype);
-    // }
-
     NQueenBoard oxWith(const NQueenBoard &mate) const
     {
         const auto randomNumber1 = getRandNumber();
