@@ -26,11 +26,11 @@ int main()
     return 0;
 }
 
-void showInfo(const auto currentGeneration, const auto minFitting, const auto& population)
+void showInfo(const auto currentGeneration, const auto maxFitting, const auto& population)
 {
     std::cout << "---------------------------------------\n";
     std::cout << "Current gen: " << currentGeneration << std::endl;
-    std::cout << "Min fitting: " << minFitting << std::endl;
+    std::cout << "Max fitting: " << maxFitting << std::endl;
     population.front().writeGenotype();
 
     population.front().drawNQueenBoard();
@@ -45,13 +45,13 @@ void simulateGenerations()
 
     auto nextPopulation = population;
 
-    const auto sortAscByFitting = [](auto &iterable) -> void
+    const auto sortDescByFitting = [](auto &iterable) -> void
     {
         std::sort(iterable.begin(), iterable.end(), [](const auto &p1, const auto &p2) -> bool
-                  { return p1.getFitting() < p2.getFitting(); });
+                  { return p1.getFitting() > p2.getFitting(); });
     };
 
-    sortAscByFitting(nextPopulation);
+    sortDescByFitting(nextPopulation);
     auto currentGeneration = 0;
 
     for (; currentGeneration != totalOfGenerations; currentGeneration++)
@@ -71,22 +71,22 @@ void simulateGenerations()
             nextPopulation[index] = population[index].oxWith(population[mateIndex]);
         }
         population = nextPopulation;
-        sortAscByFitting(population);
+        sortDescByFitting(population);
 
-        const auto minFitting = population.front().getFitting();
+        const auto maxFitting = population.front().getFitting();
 
         if (showOutputPerGeneration)
         {
-            showInfo(currentGeneration, minFitting, population);
+            showInfo(currentGeneration, maxFitting, population);
         }
 
-        if (minFitting == 0)
+        if (maxFitting == 1.0f)
             break;
     }
 
     if (!showOutputPerGeneration)
     {
-        const auto minFitting = population.front().getFitting();
-        showInfo(currentGeneration, minFitting, population);
+        const auto maxFitting = population.front().getFitting();
+        showInfo(currentGeneration, maxFitting, population);
     }
 }
