@@ -26,6 +26,17 @@ int main()
     return 0;
 }
 
+void showInfo(const auto currentGeneration, const auto minFitting, const auto& population)
+{
+    std::cout << "---------------------------------------\n";
+    std::cout << "Current gen: " << currentGeneration << std::endl;
+    std::cout << "Min fitting: " << minFitting << std::endl;
+    population.front().writeGenotype();
+
+    population.front().drawNQueenBoard();
+    std::cout << "---------------------------------------\n";
+}
+
 void simulateGenerations()
 {
     std::vector<NQueenBoard<boardSize>> population;
@@ -66,13 +77,7 @@ void simulateGenerations()
 
         if (showOutputPerGeneration)
         {
-            std::cout << "---------------------------------------\n";
-            std::cout << "Current gen: " << currentGeneration << std::endl;
-            std::cout << "Min fitting: " << minFitting << std::endl;
-            population.front().writeGenotype();
-
-            population.front().drawNQueenBoard();
-            std::cout << "---------------------------------------\n";
+            showInfo(currentGeneration, minFitting, population);
         }
 
         if (minFitting == 0)
@@ -82,12 +87,6 @@ void simulateGenerations()
     if (!showOutputPerGeneration)
     {
         const auto minFitting = population.front().getFitting();
-        std::cout << "---------------------------------------\n";
-        std::cout << "Current gen: " << currentGeneration << std::endl;
-        std::cout << "Min fitting: " << minFitting << std::endl;
-        population.front().writeGenotype();
-
-        population.front().drawNQueenBoard();
-        std::cout << "---------------------------------------\n";
+        showInfo(currentGeneration, minFitting, population);
     }
 }
