@@ -175,7 +175,7 @@ public:
             total += getNumberOfCaptures(cGenotype[ii], ii);
         }
 
-        return total;
+        return 1 / (1 + total);
     }
 
     constexpr uint32_t getBoardSize() const
