@@ -2,14 +2,19 @@
 #include "NQueenBoard.hpp"
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <string>
 
 constexpr auto populationSize = 20;
 constexpr auto boardSize = 8;
 constexpr auto totalOfGenerations = 500;
 
-constexpr auto showOutputPerGeneration = true;
+constexpr auto showOutputPerGeneration = false;
+constexpr auto saveOutPutToCsv = true; 
 
 constexpr auto randomNumberSeed = 1050;
+
+constexpr auto outputFilename = "evolution.csv";
 
 void simulateGenerations();
 
@@ -29,7 +34,7 @@ int main()
     return 0;
 }
 
-void showInfo(const auto currentGeneration, const auto maxFitting, const auto& population)
+auto showInfo(const auto currentGeneration, const auto maxFitting, const auto& population)
 {
     std::cout << "---------------------------------------\n";
     std::cout << "Current gen: " << currentGeneration << std::endl;
@@ -57,6 +62,9 @@ void simulateGenerations()
     sortDescByFitting(nextPopulation);
     auto currentGeneration = 0;
 
+    std::ofstream outputFile(outputFilename);
+    outputFile << "Generation\tmaxFitting\tcapturas\n";
+
     for (; currentGeneration != totalOfGenerations; currentGeneration++)
     {
         nextPopulation[0] = population[0];
@@ -83,9 +91,16 @@ void simulateGenerations()
             showInfo(currentGeneration, maxFitting, population);
         }
 
+        if(saveOutPutToCsv)
+        {
+            outputFile << currentGeneration << '\t' << maxFitting << '\t' << 1/maxFitting - 1 <<  std::endl;
+        }
+
         if (maxFitting == 1.0f)
             break;
     }
+
+    outputFile.close();
 
     if (!showOutputPerGeneration)
     {
