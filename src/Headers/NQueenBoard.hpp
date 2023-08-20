@@ -38,6 +38,8 @@ public:
 
     NQueenBoard oxWith(const NQueenBoard &mate) const
     {
+        cFitting = -1.0f;
+        
         const auto randomNumber1 = getRandNumber();
         const auto randomNumber2 = getRandNumber(N - randomNumber1) + randomNumber1 + 1;
 
@@ -117,6 +119,11 @@ public:
 
     auto getFitting() const
     {
+        if(cFitting != -1.0f)
+        {
+            return cFitting;
+        }
+
         const auto getNumberOfCaptures = [this](const auto row, const auto col)
         {
             auto result = 0;
@@ -175,7 +182,9 @@ public:
             total += getNumberOfCaptures(cGenotype[ii], ii);
         }
 
-        return 1 / (1 + total);
+        cFitting =  1 / (1 + total);
+
+        return cFitting;
     }
 
     constexpr uint32_t getBoardSize() const
@@ -216,4 +225,6 @@ private:
 private:
     std::array<int, N> cGenotype;
     std::array<bool, N * N> cFenotype;
+
+    mutable float cFitting = -1.0f;
 };
