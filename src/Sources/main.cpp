@@ -6,8 +6,8 @@
 #include <string>
 
 constexpr auto populationSize = 20;
-constexpr auto boardSize = 8;
-constexpr auto totalOfGenerations = 500;
+constexpr auto boardSize = 12;
+constexpr auto totalOfGenerations = 10000;
 
 constexpr auto showOutputPerGeneration = false;
 constexpr auto saveOutPutToCsv = true; 
